@@ -5,19 +5,64 @@
  */
 package consultas.views;
 
+import consultas.Database;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Meltsan
  */
 public class employees extends javax.swing.JFrame {
-
+    DefaultTableModel modelo;
     /**
-     * Creates new form employees
+     * Creates new form departments
      */
-    public employees() {
+    public employees() throws SQLException {
         initComponents();
+        cargarDatos();
     }
-
+public void cargarDatos() throws SQLException{
+            modelo= new DefaultTableModel();        
+            //modelo.addColumn("Número Adquisición");
+            modelo.addColumn("EMPLOYEE_ID");
+            modelo.addColumn("FIRST_NAME");
+            modelo.addColumn("LAST_NAME"); 
+            modelo.addColumn("EMAIL"); 
+            modelo.addColumn("PHONE_NUMBER");
+            modelo.addColumn("HIRE_DATE");
+            modelo.addColumn("JOB_ID"); 
+            modelo.addColumn("SALARY"); 
+            modelo.addColumn("COMMISSION_PCT");
+            modelo.addColumn("MANAGER_ID");
+            modelo.addColumn("DEPARTMENT_ID");             
+            jTable1.setModel(modelo);  
+            
+            String []Datos= new String[11];
+            
+		Database d=new Database("localhost", "hr", "adminhr", "1522", "orcl");
+		ResultSet rs;
+                String devolver ="";
+		System.out.println("Conectando con la base de datos:");
+		if(d.conectar()){
+			rs=d.ejecutarConsulta("select * from employees");
+                        while(rs.next()) {
+				for(int i=1; i<=11; i++) {
+					Datos[i-1]=rs.getString(i);
+				}
+                                modelo.addRow(Datos);
+                        }
+                }
+		else
+			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+		if(d.desconectar())
+			System.out.println("Desconectado tras jecutar la consulta.");
+		else
+			System.out.println("Por alguna razón no se ha podido desconectar.");            
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,18 +72,34 @@ public class employees extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        lbl_fondo = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Departamentos");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel1.setText("EMPLEADOS");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 100, -1, -1));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 440));
+
+        lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
+        getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -69,15 +130,24 @@ public class employees extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(employees.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new employees().setVisible(true);
+                try {
+                    new employees().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(employees.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbl_fondo;
     // End of variables declaration//GEN-END:variables
 }

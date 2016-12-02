@@ -7,6 +7,7 @@ package consultas;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 /**
  *
@@ -42,23 +43,15 @@ private String host;
 			return false;
 			}
 	}
-	public String ejecutarConsulta(String consulta) { // Cambia este método para hacer con la consulta lo que gustes
-		try {
- 
+	public ResultSet ejecutarConsulta(String consulta) throws SQLException { // 
 			ResultSet rs=stmt.executeQuery(consulta);
-			String devolver="";
-			while(rs.next()) {
+			/* while(rs.next()) {
 				for(int i=1; i<=rs.getFetchSize(); i++) {
 					devolver+=rs.getString(i)+" ";
 				}
 				devolver+="\n";
-			}
-			return devolver;
-		}
-		catch (Exception SQLException) {
-			System.out.println("Saltó la escepción\n"+SQLException);
-		}
-		return "error";
+			*/
+			return rs;	
 	}
 	public boolean desconectar() {
 		try {

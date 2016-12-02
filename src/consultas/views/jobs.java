@@ -5,19 +5,57 @@
  */
 package consultas.views;
 
+import consultas.Database;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Meltsan
  */
 public class jobs extends javax.swing.JFrame {
-
+    DefaultTableModel modelo;
     /**
-     * Creates new form jobs
+     * Creates new form departments
      */
-    public jobs() {
+    public jobs() throws SQLException {
         initComponents();
+        cargarDatos();
     }
-
+public void cargarDatos() throws SQLException{
+            modelo= new DefaultTableModel();        
+            //modelo.addColumn("Número Adquisición");
+            modelo.addColumn("JOB_ID");
+            modelo.addColumn("JOB_TITLE");
+            modelo.addColumn("MIN_SALARY"); 
+            modelo.addColumn("MAX_SALARY"); 
+            jTable1.setModel(modelo);  
+            
+            String []Datos= new String[4];
+            
+		Database d=new Database("localhost", "hr", "adminhr", "1522", "orcl");
+		ResultSet rs;
+                String devolver ="";
+		System.out.println("Conectando con la base de datos:");
+		if(d.conectar()){
+			rs=d.ejecutarConsulta("select * from jobs");
+                        while(rs.next()) {
+				for(int i=1; i<=4; i++) {
+					Datos[i-1]=rs.getString(i);
+				}
+                                modelo.addRow(Datos);
+                        }
+                }
+		else
+			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+		if(d.desconectar())
+			System.out.println("Desconectado tras jecutar la consulta.");
+		else
+			System.out.println("Por alguna razón no se ha podido desconectar.");            
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,18 +65,34 @@ public class jobs extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        lbl_fondo = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Departamentos");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel1.setText("EMPLEOS");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, -1, -1));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 440));
+
+        lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
+        getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -69,15 +123,24 @@ public class jobs extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(jobs.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new jobs().setVisible(true);
+                try {
+                    new jobs().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(jobs.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JLabel lbl_fondo;
     // End of variables declaration//GEN-END:variables
 }
