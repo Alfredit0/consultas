@@ -43,12 +43,12 @@ public void cargarDatos() throws SQLException{
             
             String []Datos= new String[11];
             
-		Database d=new Database("localhost", "hr", "adminhr", "1522", "orcl");
+		Database d=new Database("localhost", "Admin", "admin", "1521", "ma");
 		ResultSet rs;
                 String devolver ="";
 		System.out.println("Conectando con la base de datos:");
 		if(d.conectar()){
-			rs=d.ejecutarConsulta("select * from employees");
+			rs=d.ejecutarConsulta("select * from employees @LINK_B");
                         while(rs.next()) {
 				for(int i=1; i<=11; i++) {
 					Datos[i-1]=rs.getString(i);

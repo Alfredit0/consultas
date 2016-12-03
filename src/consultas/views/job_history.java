@@ -37,12 +37,12 @@ public void cargarDatos() throws SQLException{
             
             String []Datos= new String[5];
             
-		Database d=new Database("localhost", "hr", "adminhr", "1522", "orcl");
+		Database d=new Database("localhost", "Admin", "admin", "1521", "ma");
 		ResultSet rs;
                 String devolver ="";
 		System.out.println("Conectando con la base de datos:");
 		if(d.conectar()){
-			rs=d.ejecutarConsulta("select * from job_history");
+			rs=d.ejecutarConsulta("select * from job_history @LINK_A");
                         while(rs.next()) {
 				for(int i=1; i<=5; i++) {
 					Datos[i-1]=rs.getString(i);
@@ -72,7 +72,7 @@ public void cargarDatos() throws SQLException{
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Departamentos");
+        setTitle("Historial Empleados");
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 24)); // NOI18N

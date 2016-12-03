@@ -34,7 +34,7 @@ public void cargarDatos() throws SQLException{
             
             String []Datos= new String[2];
             
-		Database d=new Database("localhost", "hr", "adminhr", "1522", "orcl");
+		Database d=new Database("localhost", "Admin", "admin", "1521", "ma");
 		ResultSet rs;
                 String devolver ="";
 		System.out.println("Conectando con la base de datos:");
