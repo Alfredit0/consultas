@@ -38,7 +38,7 @@ public void cargarDatos() throws SQLException{
             
             String []Datos= new String[3];
             
-		this.d=new Database("localhost", "Admin", "admin", "1521", "ma");
+		this.d=new Database();
                 String devolver ="";
 		System.out.println("Conectando con la base de datos:");
 		if(d.conectar()){
@@ -67,7 +67,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             
             String []Datos= new String[3];
             
-		this.d=new Database("localhost", "Admin", "admin", "1521", "ma");
+		this.d=new Database();
                 String devolver ="";
 		System.out.println("Conectando con la base de datos:");
                 String consulta = "select * from countries@LINK_C where "+categoria+" LIKE '%"+parametro+"%'";

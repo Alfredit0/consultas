@@ -22,7 +22,11 @@ private String host;
 	private Statement stmt;
 	private Connection con;
 	public Database() {
- 
+ 		port="1521";
+		host="localhost";
+		password="adminhr";
+		dir= "orcl";
+		user="hr";
 	}
 	public Database(String h, String u, String p, String po, String s) {
 		port=po;
