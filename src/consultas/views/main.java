@@ -5,6 +5,10 @@
  */
 package consultas.views;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Meltsan
@@ -50,41 +54,81 @@ public class main extends javax.swing.JFrame {
         jButton1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 14)); // NOI18N
         jButton1.setForeground(new java.awt.Color(204, 0, 0));
         jButton1.setText("Historial de empleos");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 240, 250, 35));
 
         jButton2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 14)); // NOI18N
         jButton2.setForeground(new java.awt.Color(204, 0, 0));
         jButton2.setText("Empleos");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 330, 250, 35));
 
         jButton3.setFont(new java.awt.Font("Franklin Gothic Book", 1, 14)); // NOI18N
         jButton3.setForeground(new java.awt.Color(204, 0, 0));
         jButton3.setText("Departamentos");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 410, 250, 35));
 
         jButton4.setFont(new java.awt.Font("Franklin Gothic Book", 1, 14)); // NOI18N
         jButton4.setForeground(new java.awt.Color(204, 0, 0));
         jButton4.setText("Empleados");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 500, 250, 35));
 
         jButton5.setFont(new java.awt.Font("Franklin Gothic Book", 1, 14)); // NOI18N
         jButton5.setForeground(new java.awt.Color(204, 0, 0));
         jButton5.setText("Ubicaciones");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 240, 250, 35));
 
         jButton6.setFont(new java.awt.Font("Franklin Gothic Book", 1, 14)); // NOI18N
         jButton6.setForeground(new java.awt.Color(204, 0, 0));
         jButton6.setText("Países");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 330, 250, 35));
 
         jButton7.setFont(new java.awt.Font("Franklin Gothic Book", 1, 14)); // NOI18N
         jButton7.setForeground(new java.awt.Color(204, 0, 0));
         jButton7.setText("Regiones");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 410, 250, 35));
 
         jButton8.setFont(new java.awt.Font("Franklin Gothic Book", 1, 14)); // NOI18N
         jButton8.setForeground(new java.awt.Color(204, 0, 0));
         jButton8.setText("Salir");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 500, 250, 35));
 
         lbl_fondo.setBackground(new java.awt.Color(255, 255, 255));
@@ -94,6 +138,87 @@ public class main extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        job_history f = null; 
+        try {
+            f = new job_history();
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        f.setVisible (true); 
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        jobs f = null; 
+        try {
+            f = new jobs();
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        f.setVisible (true); 
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        departments f = null; 
+        try {
+            f = new departments();
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        f.setVisible (true); 
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        employees f = null; 
+        try {
+            f = new employees();
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        f.setVisible (true); 
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        locations f = null; 
+        try {
+            f = new locations();
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        f.setVisible (true); 
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        countries f = null; 
+        try {
+            f = new countries();
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        f.setVisible (true); 
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        regions f = null; 
+        try {
+            f = new regions();
+        } catch (SQLException ex) {
+            Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        f.setVisible (true); 
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+       dispose(); 
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments

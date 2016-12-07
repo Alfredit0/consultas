@@ -110,6 +110,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jTextFieldParam1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jComboBoxCat1 = new javax.swing.JComboBox<>();
+        jButtonMenu = new javax.swing.JButton();
         lbl_fondo = new javax.swing.JLabel();
 
         btnVerTodo.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
@@ -160,7 +161,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 440));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 400));
 
         btnVerTodo1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         btnVerTodo1.setForeground(new java.awt.Color(204, 0, 0));
@@ -196,6 +197,16 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jComboBoxCat1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONE", "REGION_ID", "REGION_NAME" }));
         getContentPane().add(jComboBoxCat1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, 180, -1));
 
+        jButtonMenu.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jButtonMenu.setForeground(new java.awt.Color(204, 0, 0));
+        jButtonMenu.setText("Menu");
+        jButtonMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonMenuActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 580, 180, -1));
+
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
 
@@ -222,10 +233,10 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                     Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }else{
-                JOptionPane.showMessageDialog(rootPane, "Par favar escribe un parametro de busqueda");
+                JOptionPane.showMessageDialog(rootPane, "Por favor escribe un parametro de busqueda");
             }
         }else{
-            JOptionPane.showMessageDialog(rootPane, "Par favar seleccione una categoria");
+            JOptionPane.showMessageDialog(rootPane, "Por favor seleccione una categoria");
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
@@ -249,12 +260,19 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                     Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }else{
-                JOptionPane.showMessageDialog(rootPane, "Par favar escribe un parametro de busqueda");
+                JOptionPane.showMessageDialog(rootPane, "Por favor escribe un parametro de busqueda");
             }
         }else{
-            JOptionPane.showMessageDialog(rootPane, "Par favar seleccione una categoria");
+            JOptionPane.showMessageDialog(rootPane, "Por favor seleccione una categoria");
         }
     }//GEN-LAST:event_btnBuscar1ActionPerformed
+
+    private void jButtonMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuActionPerformed
+        main f = null;
+        f = new main();
+        f.setVisible (true);
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,6 +319,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     private javax.swing.JButton btnBuscar1;
     private javax.swing.JButton btnVerTodo;
     private javax.swing.JButton btnVerTodo1;
+    private javax.swing.JButton jButtonMenu;
     private javax.swing.JComboBox<String> jComboBoxCat;
     private javax.swing.JComboBox<String> jComboBoxCat1;
     private javax.swing.JLabel jLabel1;

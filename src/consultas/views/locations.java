@@ -110,6 +110,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jTextFieldParam = new javax.swing.JTextField();
         jComboBoxCat = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
+        jButtonMenu = new javax.swing.JButton();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -131,7 +132,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 440));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 390));
 
         btnVerTodo.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         btnVerTodo.setForeground(new java.awt.Color(204, 0, 0));
@@ -167,6 +168,16 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jLabel2.setText("BUSCAR POR");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, 30));
 
+        jButtonMenu.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jButtonMenu.setForeground(new java.awt.Color(204, 0, 0));
+        jButtonMenu.setText("Menu");
+        jButtonMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonMenuActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 580, 180, -1));
+
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
 
@@ -193,12 +204,19 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                     Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }else{
-                JOptionPane.showMessageDialog(rootPane, "Par favar escribe un parametro de busqueda");
+                JOptionPane.showMessageDialog(rootPane, "Por favor escribe un parametro de busqueda");
             }
         }else{
-            JOptionPane.showMessageDialog(rootPane, "Par favar seleccione una categoria");
+            JOptionPane.showMessageDialog(rootPane, "Por favor seleccione una categoria");
         }
     }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void jButtonMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonMenuActionPerformed
+        main f = null;
+        f = new main();
+        f.setVisible (true);
+        dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonMenuActionPerformed
 
     /**
      * @param args the command line arguments
@@ -243,6 +261,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnVerTodo;
+    private javax.swing.JButton jButtonMenu;
     private javax.swing.JComboBox<String> jComboBoxCat;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
