@@ -134,6 +134,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jButEmpleados = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -159,8 +160,8 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
 
         jLabel2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel2.setText("BUSCAR POR");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, 30));
+        jLabel2.setText("UBICACIÓN");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, -1, 30));
 
         jComboBoxCat.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         jComboBoxCat.setForeground(new java.awt.Color(204, 0, 0));
@@ -224,6 +225,11 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             }
         });
         getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 240, 250, 40));
+
+        jLabel3.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel3.setText("BUSCAR POR");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, 30));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
@@ -404,6 +410,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     private javax.swing.JComboBox<String> jComboLocation;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldParam;

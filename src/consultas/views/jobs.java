@@ -118,6 +118,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jComboDepart = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -139,7 +140,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 900, 360));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 900, 330));
 
         btnVerTodo.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         btnVerTodo.setForeground(new java.awt.Color(204, 0, 0));
@@ -172,8 +173,8 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
 
         jLabel2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel2.setText("BUSCAR POR");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, 30));
+        jLabel2.setText("DEPARTAMENTO");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, 30));
 
         jButton3.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         jButton3.setForeground(new java.awt.Color(204, 0, 0));
@@ -183,7 +184,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 jButton3ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 200, -1, -1));
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 210, -1, -1));
 
         jButton2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         jButton2.setForeground(new java.awt.Color(204, 0, 0));
@@ -193,7 +194,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 200, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 210, -1, -1));
 
         jButton1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         jButton1.setForeground(new java.awt.Color(204, 0, 0));
@@ -203,7 +204,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, -1, -1));
 
         jComboDepart.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         jComboDepart.setForeground(new java.awt.Color(204, 0, 0));
@@ -212,7 +213,12 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 jComboDepartActionPerformed(evt);
             }
         });
-        getContentPane().add(jComboDepart, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 150, 200, 30));
+        getContentPane().add(jComboDepart, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 160, 200, 30));
+
+        jLabel3.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel3.setText("BUSCAR POR");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, 30));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
@@ -404,6 +410,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     private javax.swing.JComboBox<String> jComboDepart;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldParam;
