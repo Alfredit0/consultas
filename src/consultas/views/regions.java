@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,6 +19,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class regions extends javax.swing.JFrame {
     DefaultTableModel modelo;
+    Database d;
+    ResultSet rs;
     /**
      * Creates new form departments
      */
@@ -34,12 +37,43 @@ public void cargarDatos() throws SQLException{
             
             String []Datos= new String[2];
             
-		Database d=new Database("localhost", "Admin", "admin", "1521", "ma");
-		ResultSet rs;
-                String devolver ="";
+		Database d=new Database();
+
 		System.out.println("Conectando con la base de datos:");
 		if(d.conectar()){
-			rs=d.ejecutarConsulta("select * from regions");
+			rs=d.ejecutarConsulta("select * from regions@LINK_C");
+                        while(rs.next()) {
+				for(int i=1; i<=2; i++) {
+					Datos[i-1]=rs.getString(i);
+				}
+                                modelo.addRow(Datos);
+                        }
+                }
+		else
+			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+		if(d.desconectar())
+			System.out.println("Desconectado tras jecutar la consulta.");
+		else
+			System.out.println("Por alguna razón no se ha podido desconectar.");            
+}
+
+public void cargarDatos(String categoria, String parametro) throws SQLException{
+            modelo= new DefaultTableModel();        
+            //modelo.addColumn("Número Adquisición");
+            modelo.addColumn("REGION_ID");
+            modelo.addColumn("REGION_NAME");
+            jTable1.setModel(modelo);  
+            
+            String []Datos= new String[2];
+            
+		Database d=new Database();
+
+                
+		System.out.println("Conectando con la base de datos:");
+                String consulta = "select * from regions@LINK_C where "+categoria+" LIKE '%"+parametro+"%'";
+                System.out.println(consulta);
+		if(d.conectar()){
+			this.rs=d.ejecutarConsulta(consulta);
                         while(rs.next()) {
 				for(int i=1; i<=2; i++) {
 					Datos[i-1]=rs.getString(i);
@@ -63,10 +97,49 @@ public void cargarDatos() throws SQLException{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnVerTodo = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        jTextFieldParam = new javax.swing.JTextField();
+        jComboBoxCat = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        btnVerTodo1 = new javax.swing.JButton();
+        btnBuscar1 = new javax.swing.JButton();
+        jTextFieldParam1 = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBoxCat1 = new javax.swing.JComboBox<>();
         lbl_fondo = new javax.swing.JLabel();
+
+        btnVerTodo.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        btnVerTodo.setForeground(new java.awt.Color(204, 0, 0));
+        btnVerTodo.setText("VER TODOS");
+        btnVerTodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTodoActionPerformed(evt);
+            }
+        });
+
+        btnBuscar.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(204, 0, 0));
+        btnBuscar.setText("BUSCAR");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+
+        jTextFieldParam.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        jTextFieldParam.setForeground(new java.awt.Color(204, 0, 0));
+
+        jComboBoxCat.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jComboBoxCat.setForeground(new java.awt.Color(204, 0, 0));
+        jComboBoxCat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONE", "LOCATION_ID", "STREET_ADDRESS", "POSTAL_CODE", "CITY", "STATE_PROVINCE", "COUNTRY_ID" }));
+
+        jLabel2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel2.setText("BUSCAR POR");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Regiones");
@@ -75,7 +148,7 @@ public void cargarDatos() throws SQLException{
         jLabel1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("REGIONES");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 100, -1, 30));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, 30));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -89,11 +162,99 @@ public void cargarDatos() throws SQLException{
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 440));
 
+        btnVerTodo1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        btnVerTodo1.setForeground(new java.awt.Color(204, 0, 0));
+        btnVerTodo1.setText("VER TODOS");
+        btnVerTodo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTodo1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnVerTodo1, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 110, -1, 30));
+
+        btnBuscar1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        btnBuscar1.setForeground(new java.awt.Color(204, 0, 0));
+        btnBuscar1.setText("BUSCAR");
+        btnBuscar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscar1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBuscar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 110, -1, 30));
+
+        jTextFieldParam1.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        jTextFieldParam1.setForeground(new java.awt.Color(204, 0, 0));
+        getContentPane().add(jTextFieldParam1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, 150, 30));
+
+        jLabel3.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel3.setText("BUSCAR POR");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, 30));
+
+        jComboBoxCat1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jComboBoxCat1.setForeground(new java.awt.Color(204, 0, 0));
+        jComboBoxCat1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONE", "REGION_ID", "REGION_NAME" }));
+        getContentPane().add(jComboBoxCat1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, 180, -1));
+
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnVerTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodoActionPerformed
+        try {
+            cargarDatos();
+        } catch (SQLException ex) {
+            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnVerTodoActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String categoria = (String) jComboBoxCat1.getSelectedItem();
+        String parametro = jTextFieldParam1.getText();
+        System.out.println(categoria);
+        if(!categoria.equals("SELECCIONE")){
+            if(!"".equals(jTextFieldParam1.getText())){
+                try {
+                    cargarDatos(categoria, parametro);
+                } catch (SQLException ex) {
+                    Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Par favar escribe un parametro de busqueda");
+            }
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Par favar seleccione una categoria");
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnVerTodo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodo1ActionPerformed
+        try {
+            cargarDatos();
+        } catch (SQLException ex) {
+            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnVerTodo1ActionPerformed
+
+    private void btnBuscar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscar1ActionPerformed
+        String categoria = (String) jComboBoxCat1.getSelectedItem();
+        String parametro = jTextFieldParam1.getText();
+        System.out.println(categoria);
+        if(!categoria.equals("SELECCIONE")){
+            if(!"".equals(jTextFieldParam1.getText())){
+                try {
+                    cargarDatos(categoria, parametro);
+                } catch (SQLException ex) {
+                    Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Par favar escribe un parametro de busqueda");
+            }
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Par favar seleccione una categoria");
+        }
+    }//GEN-LAST:event_btnBuscar1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -136,9 +297,19 @@ public void cargarDatos() throws SQLException{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnBuscar1;
+    private javax.swing.JButton btnVerTodo;
+    private javax.swing.JButton btnVerTodo1;
+    private javax.swing.JComboBox<String> jComboBoxCat;
+    private javax.swing.JComboBox<String> jComboBoxCat1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextFieldParam;
+    private javax.swing.JTextField jTextFieldParam1;
     private javax.swing.JLabel lbl_fondo;
     // End of variables declaration//GEN-END:variables
 }

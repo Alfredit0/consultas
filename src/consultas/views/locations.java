@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,6 +19,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class locations extends javax.swing.JFrame {
     DefaultTableModel modelo;
+    Database d;
+    ResultSet rs;
     /**
      * Creates new form departments
      */
@@ -36,14 +39,46 @@ public void cargarDatos() throws SQLException{
             modelo.addColumn("COUNTRY_ID"); 
             jTable1.setModel(modelo);  
             
-            String []Datos= new String[6];
+            String []Datos= new String[6];            
+            Database d=new Database();		              
             
-		Database d=new Database("localhost", "Admin", "admin", "1521", "ma");
-		ResultSet rs;
-                String devolver ="";
 		System.out.println("Conectando con la base de datos:");
 		if(d.conectar()){
-			rs=d.ejecutarConsulta("select * from locations");
+			rs=d.ejecutarConsulta("select * from locations@LINK_C");
+                        while(rs.next()) {
+				for(int i=1; i<=6; i++) {
+					Datos[i-1]=rs.getString(i);
+				}
+                                modelo.addRow(Datos);
+                        }
+                }
+		else
+			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+		if(d.desconectar())
+			System.out.println("Desconectado tras jecutar la consulta.");
+		else
+			System.out.println("Por alguna razón no se ha podido desconectar.");            
+}
+
+public void cargarDatos(String categoria, String parametro) throws SQLException{
+            modelo= new DefaultTableModel();        
+            //modelo.addColumn("Número Adquisición");
+            modelo.addColumn("LOCATION_ID");
+            modelo.addColumn("STREET_ADDRESS");
+            modelo.addColumn("POSTAL_CODE"); 
+            modelo.addColumn("CITY"); 
+            modelo.addColumn("STATE_PROVINCE"); 
+            modelo.addColumn("COUNTRY_ID"); 
+            jTable1.setModel(modelo);  
+            
+            String []Datos= new String[6];            
+            Database d=new Database();	
+                
+		System.out.println("Conectando con la base de datos:");
+                String consulta = "select * from locations@LINK_C where "+categoria+" LIKE '%"+parametro+"%'";
+                System.out.println(consulta);
+		if(d.conectar()){
+			this.rs=d.ejecutarConsulta(consulta);
                         while(rs.next()) {
 				for(int i=1; i<=6; i++) {
 					Datos[i-1]=rs.getString(i);
@@ -70,6 +105,11 @@ public void cargarDatos() throws SQLException{
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        btnVerTodo = new javax.swing.JButton();
+        btnBuscar = new javax.swing.JButton();
+        jTextFieldParam = new javax.swing.JTextField();
+        jComboBoxCat = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -79,7 +119,7 @@ public void cargarDatos() throws SQLException{
         jLabel1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(204, 0, 0));
         jLabel1.setText("UBICACIONES");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 100, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -93,11 +133,72 @@ public void cargarDatos() throws SQLException{
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 440));
 
+        btnVerTodo.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        btnVerTodo.setForeground(new java.awt.Color(204, 0, 0));
+        btnVerTodo.setText("VER TODOS");
+        btnVerTodo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerTodoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnVerTodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 110, -1, 30));
+
+        btnBuscar.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(204, 0, 0));
+        btnBuscar.setText("BUSCAR");
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 110, -1, 30));
+
+        jTextFieldParam.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        jTextFieldParam.setForeground(new java.awt.Color(204, 0, 0));
+        getContentPane().add(jTextFieldParam, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, 150, 30));
+
+        jComboBoxCat.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jComboBoxCat.setForeground(new java.awt.Color(204, 0, 0));
+        jComboBoxCat.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SELECCIONE", "LOCATION_ID", "STREET_ADDRESS", "POSTAL_CODE", "CITY", "STATE_PROVINCE", "COUNTRY_ID" }));
+        getContentPane().add(jComboBoxCat, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 110, 180, -1));
+
+        jLabel2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel2.setText("BUSCAR POR");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, -1, 30));
+
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnVerTodoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerTodoActionPerformed
+        try {
+            cargarDatos();
+        } catch (SQLException ex) {
+            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnVerTodoActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        String categoria = (String) jComboBoxCat.getSelectedItem();
+        String parametro = jTextFieldParam.getText();
+        System.out.println(categoria);
+        if(!categoria.equals("SELECCIONE")){
+            if(!"".equals(jTextFieldParam.getText())){
+                try {
+                    cargarDatos(categoria, parametro);
+                } catch (SQLException ex) {
+                    Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }else{
+                JOptionPane.showMessageDialog(rootPane, "Par favar escribe un parametro de busqueda");
+            }
+        }else{
+            JOptionPane.showMessageDialog(rootPane, "Par favar seleccione una categoria");
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -140,9 +241,14 @@ public void cargarDatos() throws SQLException{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnVerTodo;
+    private javax.swing.JComboBox<String> jComboBoxCat;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTextField jTextFieldParam;
     private javax.swing.JLabel lbl_fondo;
     // End of variables declaration//GEN-END:variables
 }

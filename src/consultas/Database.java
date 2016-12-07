@@ -24,9 +24,9 @@ private String host;
 	public Database() {
  		port="1521";
 		host="localhost";
-		password="adminhr";
-		dir= "orcl";
-		user="hr";
+		password="admin";
+		dir= "ma";
+		user="Admin";
 	}
 	public Database(String h, String u, String p, String po, String s) {
 		port=po;
