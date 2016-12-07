@@ -60,10 +60,18 @@ public void cargarDatos() throws SQLException{
                 }
 		else
 			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+
+                rs=d.ejecutarConsulta("select city from LOCATIONS@LINK_C");
+    
+                while(rs.next()){
+                    jComboLocation.addItem((String) rs.getObject(1));
+                }
+                
 		if(d.desconectar())
 			System.out.println("Desconectado tras jecutar la consulta.");
 		else
 			System.out.println("Por alguna razón no se ha podido desconectar.");            
+                
 }
 
 public void cargarDatos(String categoria, String parametro) throws SQLException{
@@ -122,6 +130,10 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jTextFieldParam = new javax.swing.JTextField();
         btnBuscar = new javax.swing.JButton();
         btnVerTodo = new javax.swing.JButton();
+        jComboLocation = new javax.swing.JComboBox<>();
+        jButEmpleados = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -143,7 +155,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 440));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 900, 280));
 
         jLabel2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(204, 0, 0));
@@ -179,6 +191,40 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         });
         getContentPane().add(btnVerTodo, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 110, -1, 30));
 
+        jComboLocation.setFont(new java.awt.Font("Franklin Gothic Book", 0, 18)); // NOI18N
+        jComboLocation.setForeground(new java.awt.Color(204, 0, 0));
+        getContentPane().add(jComboLocation, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 180, 200, 30));
+
+        jButEmpleados.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jButEmpleados.setForeground(new java.awt.Color(204, 0, 0));
+        jButEmpleados.setText("ID y nombre empleados");
+        jButEmpleados.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButEmpleadosActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 270, 40));
+
+        jButton4.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(204, 0, 0));
+        jButton4.setText("ID y nombre departamento");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 240, 290, 40));
+
+        jButton5.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(204, 0, 0));
+        jButton5.setText("ID y nombre ubicacion");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 240, 250, 40));
+
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
 
@@ -211,6 +257,102 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnVerTodoActionPerformed
+
+    private void jButEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButEmpleadosActionPerformed
+        // TODO add your handling code here:}
+        Database d=new Database();
+        System.out.println("Conectando con la base de datos:");
+        if(d.conectar())
+        try {
+            rs=d.ejecutarConsulta("select employees.employee_id , employees.first_name, employees.last_name from employees@LINK_B , departments@LINK_B, locations@LINK_C"
+                    + " where locations.location_id = departments.location_id and departments.department_id = employees.department_id and locations.city = '"+jComboLocation.getSelectedItem()+"'");
+        } catch (SQLException ex) {
+            Logger.getLogger(employees.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        else
+        System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+
+        String [] titulos ={"ID empleados","Primer apellido", "Segundo apellido"};
+
+        modelo=new DefaultTableModel(null, titulos);
+
+        String fila []= new String [3];
+
+        try {
+            while(rs.next()){
+                fila [0]=rs.getString("EMPLOYEE_ID");
+                fila [1]=rs.getString("FIRST_NAME");
+                fila [2]=rs.getString("LAST_NAME");
+                modelo.addRow(fila);
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(employees.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTable1.setModel(modelo);
+    }//GEN-LAST:event_jButEmpleadosActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        Database d=new Database();
+        System.out.println("Conectando con la base de datos:");
+        if(d.conectar())
+        try {
+            rs=d.ejecutarConsulta("select departments.department_id , departments.department_name from  departments@LINK_B, locations@LINK_C where locations.location_id = departments.location_id  and locations.city = '"+jComboLocation.getSelectedItem()+"'");
+        } catch (SQLException ex) {
+            Logger.getLogger(employees.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        else
+        System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+
+        String [] titulos ={"ID departamento","Nombre del departamento"};
+
+        modelo=new DefaultTableModel(null, titulos);
+
+        String fila []= new String [2];
+
+        try {
+            while(rs.next()){
+                fila [0]=rs.getString("DEPARTMENT_ID");
+                fila [1]=rs.getString("DEPARTMENT_NAME");
+                modelo.addRow(fila);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(employees.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTable1.setModel(modelo);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        Database d=new Database();
+        System.out.println("Conectando con la base de datos:");
+        if(d.conectar())
+        try {
+            rs=d.ejecutarConsulta("select location_id , city from   locations@LINK_C where city ='"+jComboLocation.getSelectedItem()+"'");
+        } catch (SQLException ex) {
+            Logger.getLogger(employees.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        else
+        System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+
+        String [] titulos ={"ID ubicación","Ciudad"};
+
+        modelo=new DefaultTableModel(null, titulos);
+
+        String fila []= new String [2];
+
+        try {
+            while(rs.next()){
+                fila [0]=rs.getString("LOCATION_ID");
+                fila [1]=rs.getString("CITY");
+                modelo.addRow(fila);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(employees.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTable1.setModel(modelo);
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -255,7 +397,11 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnVerTodo;
+    private javax.swing.JButton jButEmpleados;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBoxCat;
+    private javax.swing.JComboBox<String> jComboLocation;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
