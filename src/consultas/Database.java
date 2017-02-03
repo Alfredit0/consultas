@@ -21,12 +21,20 @@ private String host;
 	private String dir;
 	private Statement stmt;
 	private Connection con;
+
+    public Connection getCon() {
+        return con;
+    }
+
+    public void setCon(Connection con) {
+        this.con = con;
+    }
 	public Database() {
  		port="1521";
 		host="localhost";
-		password="admin";
-		dir= "ma";
-		user="Admin";
+		password="adminhr";
+		dir= "orcl";
+		user="hr";
 	}
 	public Database(String h, String u, String p, String po, String s) {
 		port=po;
@@ -49,14 +57,59 @@ private String host;
 	}
 	public ResultSet ejecutarConsulta(String consulta) throws SQLException { // 
 			ResultSet rs=stmt.executeQuery(consulta);
-			/* while(rs.next()) {
-				for(int i=1; i<=rs.getFetchSize(); i++) {
-					devolver+=rs.getString(i)+" ";
-				}
-				devolver+="\n";
-			*/
 			return rs;	
 	}
+        public boolean insertarCountry(String id, String nombre, int region){
+            String consulta = "insert into countries (country_id, country_name, region_id) values ('"+
+                              id+"', '"+nombre+"', "+region+")";            
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                System.out.println("Inserccion correcta en country");
+                else
+                    System.out.println("Ha ocurrido un error - Inserccion en country");
+                return true;
+            }catch(Exception e){
+                System.out.println(e);
+                return false;
+            }
+        }
+        public boolean actualizarCountry(String id, String nombre, int region){
+            String consulta = "update countries Set country_name='"+
+                    nombre+"', region_id = "+region+" Where country_id='"+id+"'";
+            try{
+                if(ejecutarActualizacion(consulta))
+                    System.out.println("Actualizacion correcta");
+                return true;
+            }catch(Exception e){
+                return false;
+            }
+        }         
+        public boolean eliminarCountry(String id){
+            String consulta = "delete from countries where country_id='"+id+"'";
+            try{
+                if(ejecutarActualizacion(consulta))
+                    System.out.println("Eliminacion correcta de country");
+                else 
+                    System.out.println("Falla al eliminar country");
+                return true;
+            }catch(Exception e){
+                return false;
+            }
+        }        
+        public boolean ejecutarActualizacion (String sql) {
+        try {
+            Statement sentencia;
+            sentencia = getCon().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+            sentencia.executeUpdate(sql);
+            getCon().commit();
+            sentencia.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 	public boolean desconectar() {
 		try {
 			con.close();

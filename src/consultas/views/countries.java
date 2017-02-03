@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Meltsan
  */
 public class countries extends javax.swing.JFrame {
+    static final boolean EXL = true; //Execute queries on Local Database
     DefaultTableModel modelo;
     Database d;
     ResultSet rs;
@@ -42,7 +43,12 @@ public void cargarDatos() throws SQLException{
                 String devolver ="";
 		System.out.println("Conectando con la base de datos:");
 		if(d.conectar()){
-			this.rs=d.ejecutarConsulta("select * from countries @LINK_C");
+                    String q;
+                     if(EXL)
+                         q="select * from countries";
+                     else
+                         q="select * from countries @LINK_C";
+			this.rs=d.ejecutarConsulta(q);
                         while(rs.next()) {
 				for(int i=1; i<=3; i++) {
 					Datos[i-1]=rs.getString(i);
@@ -70,7 +76,11 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
 		this.d=new Database();
                 String devolver ="";
 		System.out.println("Conectando con la base de datos:");
-                String consulta = "select * from countries@LINK_C where "+categoria+" LIKE '%"+parametro+"%'";
+                String consulta;
+                if(EXL)
+                    consulta= "select * from countries where "+categoria+" LIKE '%"+parametro+"%'";
+                else
+                    consulta= consulta= "select * from countries@LINK_C where "+categoria+" LIKE '%"+parametro+"%'";
                 System.out.println(consulta);
 		if(d.conectar()){
 			this.rs=d.ejecutarConsulta(consulta);
@@ -106,6 +116,13 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         btnBuscar = new javax.swing.JButton();
         btnVerTodo = new javax.swing.JButton();
         jButtonMenu = new javax.swing.JButton();
+        textId = new javax.swing.JTextField();
+        nombre = new javax.swing.JTextField();
+        region_id = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        btnAgregar = new javax.swing.JButton();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -122,7 +139,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 410));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 220, 900, 410));
 
         jLabel1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(204, 0, 0));
@@ -171,7 +188,27 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 jButtonMenuActionPerformed(evt);
             }
         });
-        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 580, 180, -1));
+        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 640, 180, -1));
+        getContentPane().add(textId, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 110, 30));
+        getContentPane().add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 180, 130, 30));
+        getContentPane().add(region_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 180, 70, 30));
+
+        jLabel3.setText("ID PAÍS");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
+
+        jLabel4.setText("NOMBRE");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, -1, -1));
+
+        jLabel5.setText("ID REGIÓN");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 190, -1, -1));
+
+        btnAgregar.setText("Agregar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 180, -1, -1));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
@@ -212,6 +249,27 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         f.setVisible (true); 
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonMenuActionPerformed
+
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+		if(d.conectar()){
+                    String id = textId.getText();
+                    String nom= nombre.getText();
+                    int rid = Integer.parseInt(region_id.getText());
+                    if (d.insertarCountry(id, nom, rid)){
+                        String []Datos= new String[3];
+                        Datos[0]= id;
+                        Datos[1]=nom;
+                        Datos[2]=""+rid;
+                        modelo.addRow(Datos);
+                    }
+                }
+		else
+			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+		if(d.desconectar())
+			System.out.println("Desconectado tras jecutar la consulta.");
+		else
+			System.out.println("Por alguna razón no se ha podido desconectar.");
+    }//GEN-LAST:event_btnAgregarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -254,15 +312,22 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnVerTodo;
     private javax.swing.JButton jButtonMenu;
     private javax.swing.JComboBox<String> jComboBoxCat;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldParam;
     private javax.swing.JLabel lbl_fondo;
+    private javax.swing.JTextField nombre;
+    private javax.swing.JTextField region_id;
+    private javax.swing.JTextField textId;
     // End of variables declaration//GEN-END:variables
 }
