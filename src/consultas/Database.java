@@ -100,6 +100,47 @@ private String host;
             }
           
         }        
+        public boolean insertarDeparment(String id, String nombre,int managerId, int locationId){
+            String consulta = "insert into departments (department_id, department_name, manager_id, location_id) values ("+
+                              id+", '"+nombre+"', "+managerId+","+locationId+")";            
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                System.out.println("Inserccion correcta en country");
+                else
+                    System.out.println("Ha ocurrido un error - Inserccion en country");
+                return true;
+            }catch(Exception e){
+                System.out.println(e);
+                return false;
+            }
+        }
+        public boolean actualizarDeparment(String id, String nombre, int managerId, int locationId){
+            String consulta = "update departments Set  department_name='"+
+                    nombre+"', manager_id = "+managerId+",location_id = "+locationId+"  Where department_id='"+id+"'";
+            try{
+                if(ejecutarActualizacion(consulta))
+                    System.out.println("Actualizacion correcta");
+                return true;
+            }catch(Exception e){
+                return false;
+            }
+        }         
+        public boolean eliminarDeparment(String id){
+            String consulta = "delete from departments where department_id='"+id+"'";
+            try{
+                if(ejecutarActualizacion(consulta)){
+                    System.out.println("Eliminacion correcta de country");
+                    return true;
+                }else{ 
+                    System.out.println("Falla al eliminar country");
+                    return false;
+                }
+            }catch(Exception e){
+                return false;
+            }
+          
+        }              
         public boolean ejecutarActualizacion (String sql) {
         try {
             Statement sentencia;
