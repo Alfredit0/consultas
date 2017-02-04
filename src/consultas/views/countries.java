@@ -123,6 +123,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -200,7 +201,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 180, -1, -1));
 
         jLabel5.setText("ID REGIÓN");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 190, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, -1, -1));
 
         btnAgregar.setText("Agregar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
@@ -209,6 +210,14 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             }
         });
         getContentPane().add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 180, -1, -1));
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 180, -1, -1));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
@@ -271,6 +280,39 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
 			System.out.println("Por alguna razón no se ha podido desconectar.");
     }//GEN-LAST:event_btnAgregarActionPerformed
 
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+                    String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
+                    int dialogButton = JOptionPane.YES_NO_OPTION;
+                    int dialogResult = JOptionPane.showConfirmDialog(this, "¿Eliminar el Registro con ID: "+idSelected,
+                                                                    "Eliminar Regustro", dialogButton);
+                    if(dialogResult == 0) {
+		if(d.conectar()){
+
+                    if (!d.eliminarCountry(idSelected)){
+                        JOptionPane.showMessageDialog(null, "Por motivos de integridad referencial, no puede eliminarse\n" +
+                        "esa tupla");
+                        }else{
+                           try {
+                                cargarDatos();
+                            } catch (SQLException ex) {
+                                Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                }
+		else
+			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+		if(d.desconectar())
+			System.out.println("Desconectado tras jecutar la consulta.");
+		else
+			System.out.println("Por alguna razón no se ha podido desconectar.");                      
+                    }
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea eliminar");
+        }
+
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -314,6 +356,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnVerTodo;
     private javax.swing.JButton jButtonMenu;
     private javax.swing.JComboBox<String> jComboBoxCat;
