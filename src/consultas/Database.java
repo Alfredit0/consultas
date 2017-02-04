@@ -88,14 +88,17 @@ private String host;
         public boolean eliminarCountry(String id){
             String consulta = "delete from countries where country_id='"+id+"'";
             try{
-                if(ejecutarActualizacion(consulta))
+                if(ejecutarActualizacion(consulta)){
                     System.out.println("Eliminacion correcta de country");
-                else 
+                    return true;
+                }else{ 
                     System.out.println("Falla al eliminar country");
-                return true;
+                    return false;
+                }
             }catch(Exception e){
                 return false;
             }
+          
         }        
         public boolean ejecutarActualizacion (String sql) {
         try {

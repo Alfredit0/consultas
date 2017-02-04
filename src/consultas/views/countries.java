@@ -22,6 +22,8 @@ public class countries extends javax.swing.JFrame {
     DefaultTableModel modelo;
     Database d;
     ResultSet rs;
+    String idEdit;//Id que se selecciona para editar
+    int bandEdit;//bandera que se activa cuando se presiona el boton de editar
     /**
      * Creates new form departments
      */
@@ -117,13 +119,14 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         btnVerTodo = new javax.swing.JButton();
         jButtonMenu = new javax.swing.JButton();
         textId = new javax.swing.JTextField();
-        nombre = new javax.swing.JTextField();
-        region_id = new javax.swing.JTextField();
+        textNombre = new javax.swing.JTextField();
+        textRegionId = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         btnAgregar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -191,8 +194,8 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         });
         getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 640, 180, -1));
         getContentPane().add(textId, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 110, 30));
-        getContentPane().add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 180, 130, 30));
-        getContentPane().add(region_id, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 180, 70, 30));
+        getContentPane().add(textNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 180, 130, 30));
+        getContentPane().add(textRegionId, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 180, 70, 30));
 
         jLabel3.setText("ID PAÍS");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, -1, -1));
@@ -203,7 +206,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jLabel5.setText("ID REGIÓN");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 180, -1, -1));
 
-        btnAgregar.setText("Agregar");
+        btnAgregar.setText("Guardar");
         btnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAgregarActionPerformed(evt);
@@ -217,7 +220,15 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 btnEliminarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 180, -1, -1));
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 180, -1, -1));
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 180, -1, -1));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
@@ -260,10 +271,14 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     }//GEN-LAST:event_jButtonMenuActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-		if(d.conectar()){
+	if("".equals(textId.getText())&&"".equals(textNombre.getText())&&"".equals(textRegionId.getText()))
+            JOptionPane.showMessageDialog(null, "Por favor rellene todos los campos");
+        else{
+        if(bandEdit!=1){            
+        if(d.conectar()){
                     String id = textId.getText();
-                    String nom= nombre.getText();
-                    int rid = Integer.parseInt(region_id.getText());
+                    String nom= textNombre.getText();
+                    int rid = Integer.parseInt(textRegionId.getText());
                     if (d.insertarCountry(id, nom, rid)){
                         String []Datos= new String[3];
                         Datos[0]= id;
@@ -278,6 +293,32 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
 			System.out.println("Desconectado tras jecutar la consulta.");
 		else
 			System.out.println("Por alguna razón no se ha podido desconectar.");
+        }else{
+            if(idEdit.equals(textId.getText())){                
+            }else{
+                JOptionPane.showMessageDialog(null, "El campo Id no se puede modificar porque es clave primaria, se guardaran los demas valores excepto este");
+            }
+                if(d.conectar()){
+                    String id = idEdit;
+                    String nom= textNombre.getText();
+                    int rid = Integer.parseInt(textRegionId.getText());
+                    if (d.actualizarCountry(id, nom, rid)){
+                        try {
+                            cargarDatos();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+		else
+			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+		if(d.desconectar())
+			System.out.println("Desconectado tras jecutar la consulta.");
+		else
+			System.out.println("Por alguna razón no se ha podido desconectar.");
+                bandEdit=0;
+        }
+        }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -312,6 +353,21 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         }
 
     }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+           String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
+           String nombre=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),1));
+           String region=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),2));                                    
+           bandEdit=1;
+           idEdit=idSelected;
+           textId.setText(idEdit);
+           textNombre.setText(nombre);
+           textRegionId.setText(region);
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea Editar");
+        }        
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -356,6 +412,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnVerTodo;
     private javax.swing.JButton jButtonMenu;
@@ -369,8 +426,8 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldParam;
     private javax.swing.JLabel lbl_fondo;
-    private javax.swing.JTextField nombre;
-    private javax.swing.JTextField region_id;
     private javax.swing.JTextField textId;
+    private javax.swing.JTextField textNombre;
+    private javax.swing.JTextField textRegionId;
     // End of variables declaration//GEN-END:variables
 }
