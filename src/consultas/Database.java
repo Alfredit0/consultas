@@ -142,6 +142,48 @@ private String host;
             }
           
         }              
+        public boolean insertarJobHistory(String id, String dateStart,String dateEnd, String jobId, String depId){
+            String consulta = "insert into job_history (employee_id, start_date, end_date, job_id, department_id) values ("+
+                              id+", '"+dateStart+"', '"+dateEnd+"','"+jobId+"',"+depId+")";            
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                System.out.println("Inserccion correcta en country");
+                else
+                    System.out.println("Ha ocurrido un error - Inserccion en country");
+                return true;
+            }catch(Exception e){
+                System.out.println(e);
+                return false;
+            }
+        }
+        public boolean actualizarJobHistory(String id, String dateStart,String dateEnd){
+            String consulta = "update job_history Set end_date = '"+dateEnd+"' Where employee_id="+id+
+                    " and start_date='"+dateStart+"'";;
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                    System.out.println("Actualizacion correcta");
+                return true;
+            }catch(Exception e){
+                return false;
+            }
+        }         
+        public boolean eliminarJobHistory(String id, String date){
+            String consulta = "delete from job_history where employee_id="+id+" and start_date='"+date+"'";
+            try{
+                if(ejecutarActualizacion(consulta)){
+                    System.out.println("Eliminacion correcta de country");
+                    return true;
+                }else{ 
+                    System.out.println("Falla al eliminar country");
+                    return false;
+                }
+            }catch(Exception e){
+                return false;
+            }
+          
+        }          
         public boolean ejecutarActualizacion (String sql) {
         try {
             Statement sentencia;

@@ -18,9 +18,12 @@ import javax.swing.table.DefaultTableModel;
  * @author Meltsan
  */
 public class job_history extends javax.swing.JFrame {
+    static final boolean EXL = true; //Execute queries on Local Database    
     DefaultTableModel modelo;
     Database d;
     ResultSet rs;
+    String idEdit;//Id que se selecciona para editar
+    int bandEdit;//bandera que se activa cuando se presiona el boton de editar      
     /**
      * Creates new form departments
      */
@@ -40,12 +43,16 @@ public void cargarDatos() throws SQLException{
             
             String []Datos= new String[5];
             
-		Database d=new Database();
+		this.d=new Database();
 		ResultSet rs;
-                String devolver ="";
+                String consulta;
+                if(EXL)
+                    consulta="select * from job_history";
+                else 
+                    consulta="select * from job_history @LINK_A";
 		System.out.println("Conectando con la base de datos:");
 		if(d.conectar()){
-			rs=d.ejecutarConsulta("select * from job_history @LINK_A");
+			rs=d.ejecutarConsulta(consulta);
                         while(rs.next()) {
 				for(int i=1; i<=5; i++) {
 					Datos[i-1]=rs.getString(i);
@@ -70,12 +77,15 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             modelo.addColumn("DEPARTMENT_ID"); 
             jTable1.setModel(modelo);  
             
-            String []Datos= new String[5];
-            
-		Database d=new Database();
-                
+            String []Datos= new String[5];            		                
 		System.out.println("Conectando con la base de datos:");
-                String consulta = "select * from job_history@LINK_A where "+categoria+" LIKE '%"+parametro+"%'";
+                
+                String consulta;
+                if(EXL)
+                    consulta="select * from job_history where "+categoria+" LIKE '%"+parametro+"%'";
+                else
+                    consulta="select * from job_history@LINK_A where "+categoria+" LIKE '%"+parametro+"%'";
+
                 System.out.println(consulta);
 		if(d.conectar()){
 			this.rs=d.ejecutarConsulta(consulta);
@@ -111,6 +121,19 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jComboBoxCat = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jButtonMenu = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        textId1 = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        textDateStart = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        textDateEnd = new javax.swing.JTextField();
+        jLabel9 = new javax.swing.JLabel();
+        textJobId = new javax.swing.JTextField();
+        btnAgregar1 = new javax.swing.JButton();
+        btnEditar1 = new javax.swing.JButton();
+        btnEliminar1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        textDepId = new javax.swing.JTextField();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -132,7 +155,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 400));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, 900, 400));
 
         btnVerTodo.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         btnVerTodo.setForeground(new java.awt.Color(204, 0, 0));
@@ -176,7 +199,51 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 jButtonMenuActionPerformed(evt);
             }
         });
-        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 580, 180, -1));
+        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 670, 180, -1));
+
+        jLabel6.setText("ID EMPLEADO");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, -1, -1));
+        getContentPane().add(textId1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 70, 30));
+
+        jLabel7.setText("FECHA INCIO");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 190, -1, -1));
+        getContentPane().add(textDateStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 180, 100, 30));
+
+        jLabel8.setText("FECHA FINAL");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 190, -1, -1));
+        getContentPane().add(textDateEnd, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 180, 70, 30));
+
+        jLabel9.setText("ID DEL EMPLEO");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 190, -1, -1));
+        getContentPane().add(textJobId, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 180, 70, 30));
+
+        btnAgregar1.setText("Guardar");
+        btnAgregar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregar1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAgregar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 180, -1, -1));
+
+        btnEditar1.setText("Editar");
+        btnEditar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditar1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEditar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 180, -1, -1));
+
+        btnEliminar1.setText("Eliminar");
+        btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminar1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEliminar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(870, 180, -1, -1));
+
+        jLabel3.setText("ID DEPARTAMENTO");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 230, -1, -1));
+        getContentPane().add(textDepId, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 220, 100, 30));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
@@ -218,6 +285,124 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonMenuActionPerformed
 
+    private void btnAgregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregar1ActionPerformed
+        if("".equals(textId1.getText())||"".equals(textDateStart.getText())||"".equals(textDateEnd.getText())||
+                "".equals(textJobId.getText()))
+        JOptionPane.showMessageDialog(null, "Por favor rellene todos los campos obligatorios");
+        else{
+            if(bandEdit!=1){
+                if(d.conectar()){
+                    String id = textId1.getText();
+                    String starDate= textDateStart.getText();
+                    String endDate =textDateEnd.getText();
+                    String jobId = textJobId.getText();
+                    String depId = textDepId.getText();
+                    if (d.insertarJobHistory(id, starDate, endDate, jobId, depId)){
+                        try {
+                            cargarDatos();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(departments.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                else{
+                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                }
+                if(d.desconectar())
+                System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                System.out.println("Por alguna razón no se ha podido desconectar.");
+            }else{
+                if(idEdit.equals(textId1.getText())){
+                }else{
+                    JOptionPane.showMessageDialog(null, "El campo Id no se puede modificar porque es clave primaria, se guardaran los demas valores excepto este");
+                }
+                if(d.conectar()){
+                    String id = idEdit;
+                    String starDate= textDateStart.getText();
+                    String endDate =textDateEnd.getText();
+                    String jobId = textJobId.getText();
+                    String depId = textDepId.getText();
+                    if (d.actualizarJobHistory(id, starDate, endDate)){
+                        try {
+                            cargarDatos();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                else{
+                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                }
+                if(d.desconectar())
+                    System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                    System.out.println("Por alguna razón no se ha podido desconectar.");
+                bandEdit=0;
+                textId1.setEditable(true);
+                textDateEnd.setEditable(true);
+                textJobId.setEditable(true);
+                limpiarCajas();
+            }
+            limpiarCajas();
+        }
+    }//GEN-LAST:event_btnAgregar1ActionPerformed
+
+    private void btnEditar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditar1ActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+            String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
+            String sDate=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),1));
+            String eDate=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),2));
+            String jId=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),3));
+            String dId=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),4));
+            bandEdit=1;
+            idEdit=idSelected;
+            textId1.setText(idEdit);
+            textDateStart.setText(sDate);
+            textDateEnd.setText(eDate);
+            textJobId.setText(jId);
+            textDepId.setText(dId);
+            textId1.setEditable(false);
+            textDateStart.setEditable(false);
+            textJobId.setEditable(false);
+            textDepId.setEditable(false);
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea Editar");
+        }
+    }//GEN-LAST:event_btnEditar1ActionPerformed
+
+    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+            String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(this, "¿Eliminar el Registro con ID: "+idSelected,
+                "Eliminar Regustro", dialogButton);
+            if(dialogResult == 0) {
+                if(d.conectar()){
+
+                    if (!d.eliminarDeparment(idSelected)){
+                        JOptionPane.showMessageDialog(null, "Por motivos de integridad referencial, no puede eliminarse\n" +
+                            "esa tupla");
+                    }else{
+                        try {
+                            cargarDatos();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                else
+                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                if(d.desconectar())
+                System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                System.out.println("Por alguna razón no se ha podido desconectar.");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea eliminar");
+        }
+    }//GEN-LAST:event_btnEliminar1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -257,17 +442,32 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             }
         });
     }
-
+public void limpiarCajas(){
+    
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar1;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar1;
+    private javax.swing.JButton btnEliminar1;
     private javax.swing.JButton btnVerTodo;
     private javax.swing.JButton jButtonMenu;
     private javax.swing.JComboBox<String> jComboBoxCat;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldParam;
     private javax.swing.JLabel lbl_fondo;
+    private javax.swing.JTextField textDateEnd;
+    private javax.swing.JTextField textDateStart;
+    private javax.swing.JTextField textDepId;
+    private javax.swing.JTextField textId1;
+    private javax.swing.JTextField textJobId;
     // End of variables declaration//GEN-END:variables
 }
