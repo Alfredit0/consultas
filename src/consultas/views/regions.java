@@ -18,9 +18,12 @@ import javax.swing.table.DefaultTableModel;
  * @author Meltsan
  */
 public class regions extends javax.swing.JFrame {
+    static final boolean EXL = true; //Execute queries on Local Database
     DefaultTableModel modelo;
     Database d;
     ResultSet rs;
+    String idEdit;//Id que se selecciona para editar
+    int bandEdit;//bandera que se activa cuando se presiona el boton de editar    
     /**
      * Creates new form departments
      */
@@ -36,12 +39,16 @@ public void cargarDatos() throws SQLException{
             jTable1.setModel(modelo);  
             
             String []Datos= new String[2];
-            
-		Database d=new Database();
-
+            String consulta;
+		this.d=new Database();
+                if(EXL)
+                    consulta="select * from regions";
+                else
+                    consulta="select * from regions@LINK_C";
+                
 		System.out.println("Conectando con la base de datos:");
 		if(d.conectar()){
-			rs=d.ejecutarConsulta("select * from regions@LINK_C");
+			rs=d.ejecutarConsulta(consulta);
                         while(rs.next()) {
 				for(int i=1; i<=2; i++) {
 					Datos[i-1]=rs.getString(i);
@@ -65,12 +72,14 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             jTable1.setModel(modelo);  
             
             String []Datos= new String[2];
-            
-		Database d=new Database();
-
-                
+		this.d=new Database();
 		System.out.println("Conectando con la base de datos:");
-                String consulta = "select * from regions@LINK_C where "+categoria+" LIKE '%"+parametro+"%'";
+                
+                String consulta;
+                if(EXL)
+                    consulta= "select * from regions where "+categoria+" LIKE '%"+parametro+"%'";
+                else
+                    consulta= "select * from regions@LINK_C where "+categoria+" LIKE '%"+parametro+"%'";
                 System.out.println(consulta);
 		if(d.conectar()){
 			this.rs=d.ejecutarConsulta(consulta);
@@ -111,6 +120,13 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jLabel3 = new javax.swing.JLabel();
         jComboBoxCat1 = new javax.swing.JComboBox<>();
         jButtonMenu = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        textId = new javax.swing.JTextField();
+        textNombre = new javax.swing.JTextField();
+        btnAgregar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         lbl_fondo = new javax.swing.JLabel();
 
         btnVerTodo.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
@@ -161,7 +177,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 900, 400));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 900, 400));
 
         btnVerTodo1.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         btnVerTodo1.setForeground(new java.awt.Color(204, 0, 0));
@@ -205,7 +221,39 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 jButtonMenuActionPerformed(evt);
             }
         });
-        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 580, 180, -1));
+        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 640, 180, -1));
+
+        jLabel4.setText("ID REGIÓN");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, -1, -1));
+        getContentPane().add(textId, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 180, 110, 30));
+        getContentPane().add(textNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 180, 130, 30));
+
+        btnAgregar.setText("Guardar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 180, -1, -1));
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 180, -1, -1));
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 180, -1, -1));
+
+        jLabel5.setText("NOMBRE REGIÓN");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, -1, -1));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
@@ -274,6 +322,108 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonMenuActionPerformed
 
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        if("".equals(textId.getText())||"".equals(textNombre.getText()))
+        JOptionPane.showMessageDialog(null, "Por favor rellene todos los campos");
+        else{
+            if(bandEdit!=1){
+                if(d.conectar()){
+                    try{
+                    int id = Integer.parseInt(textId.getText());
+                    String nom= textNombre.getText();                    
+                    if (d.insertarRegion(id, nom)){
+                        String []Datos= new String[3];
+                        Datos[0]= ""+id;
+                        Datos[1]=nom;                        
+                        modelo.addRow(Datos);
+                    }
+                    }catch(Exception e){
+                        JOptionPane.showMessageDialog(null, "El ID debe ser un número");
+                    }
+                }
+                else{
+                    System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                }
+                if(d.desconectar())
+                System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                System.out.println("Por alguna razón no se ha podido desconectar.");
+            }else{
+                if(idEdit.equals(textId.getText())){
+                }else{
+                    JOptionPane.showMessageDialog(null, "El campo Id no se puede modificar porque es clave primaria, se guardaran los demas valores excepto este");
+                }
+                if(d.conectar()){
+                    int id = Integer.parseInt(idEdit);
+                    String nom= textNombre.getText();                    
+                    if (d.actualizarRegion(id, nom)){
+                        try {
+                            cargarDatos();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                else{
+                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                }
+                if(d.desconectar())
+                System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                System.out.println("Por alguna razón no se ha podido desconectar.");
+                bandEdit=0;
+                textId.setEditable(true);                
+            }
+            limpiarCajas();
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+            String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
+            String nombre=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),1));            
+            bandEdit=1;
+            idEdit=idSelected;
+            textId.setText(idEdit);
+            textNombre.setText(nombre);           
+            textId.setEditable(false);            
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea Editar");
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+            int idSelected=Integer.parseInt(String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0)));
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(this, "¿Eliminar el Registro con ID: "+idSelected,
+                "Eliminar Regustro", dialogButton);
+            if(dialogResult == 0) {
+                if(d.conectar()){
+
+                    if (!d.eliminarRegion(idSelected)){
+                        JOptionPane.showMessageDialog(null, "Por motivos de integridad referencial, no puede eliminarse\n" +
+                            "esa tupla");
+                    }else{
+                        try {
+                            cargarDatos();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                else
+                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                if(d.desconectar())
+                System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                System.out.println("Por alguna razón no se ha podido desconectar.");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea eliminar");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -313,10 +463,16 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             }
         });
     }
-
+    public void limpiarCajas(){
+        textId.setText("");
+        textNombre.setText("");
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnBuscar1;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnVerTodo;
     private javax.swing.JButton btnVerTodo1;
     private javax.swing.JButton jButtonMenu;
@@ -325,10 +481,14 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldParam;
     private javax.swing.JTextField jTextFieldParam1;
     private javax.swing.JLabel lbl_fondo;
+    private javax.swing.JTextField textId;
+    private javax.swing.JTextField textNombre;
     // End of variables declaration//GEN-END:variables
 }

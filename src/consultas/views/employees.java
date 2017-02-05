@@ -18,9 +18,12 @@ import javax.swing.table.DefaultTableModel;
  * @author Meltsan
  */
 public class employees extends javax.swing.JFrame {
+    static final boolean EXL = true; //Execute queries on Local Database
     DefaultTableModel modelo;
     Database d;
     ResultSet rs;
+    String idEdit;//Id que se selecciona para editar
+    int bandEdit;//bandera que se activa cuando se presiona el boton de editar        
     /**
      * Creates new form departments
      */
@@ -45,12 +48,15 @@ public void cargarDatos() throws SQLException{
             jTable1.setModel(modelo);  
             
             String []Datos= new String[11];
-            
-		Database d=new Database();
-                
+            String consulta;
+           this.d=new Database();
+            if(EXL)
+                consulta="select * from employees";
+            else
+                consulta="select * from employees @LINK_B";
 		System.out.println("Conectando con la base de datos:");
 		if(d.conectar()){
-			rs=d.ejecutarConsulta("select * from employees @LINK_B");
+			rs=d.ejecutarConsulta(consulta);
                         while(rs.next()) {
 				for(int i=1; i<=11; i++) {
 					Datos[i-1]=rs.getString(i);
@@ -58,10 +64,14 @@ public void cargarDatos() throws SQLException{
                                 modelo.addRow(Datos);
                         }
                 }
-		else
+                else{
 			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
-
-                rs=d.ejecutarConsulta("select city from LOCATIONS@LINK_C");
+                }
+                if(EXL)
+                  consulta="select city from LOCATIONS";
+                else
+                 consulta="select city from LOCATIONS@LINK_C";
+                rs=d.ejecutarConsulta(consulta);
     
                 while(rs.next()){
                     jComboLocation.addItem((String) rs.getObject(1));
@@ -95,7 +105,11 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
 		Database d=new Database();
                 
 		System.out.println("Conectando con la base de datos:");
-                String consulta = "select * from employees@LINK_B where "+categoria+" LIKE '%"+parametro+"%'";
+                String consulta;
+                if(EXL)
+                    consulta= "select * from employees where "+categoria+" LIKE '%"+parametro+"%'";
+                else
+                    consulta= "select * from employees@LINK_B where "+categoria+" LIKE '%"+parametro+"%'";
                 System.out.println(consulta);
 		if(d.conectar()){
 			this.rs=d.ejecutarConsulta(consulta);
@@ -157,7 +171,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, 900, 250));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 390, 900, 250));
 
         jLabel2.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(204, 0, 0));
@@ -240,7 +254,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 jButtonMenuActionPerformed(evt);
             }
         });
-        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 580, 180, -1));
+        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 650, 180, -1));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));

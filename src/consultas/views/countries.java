@@ -317,8 +317,8 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
 		else
 			System.out.println("Por alguna razón no se ha podido desconectar.");
                 bandEdit=0;
-                textId.setEditable(false);
-                textRegionId.setEditable(false);                
+                textId.setEditable(true);
+                textRegionId.setEditable(true);                
         }
         limpiarCajas();
         }

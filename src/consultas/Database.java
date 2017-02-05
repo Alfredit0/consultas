@@ -184,6 +184,55 @@ private String host;
             }
           
         }          
+   // *************************** REGIONS OPERATIONS *********************************************** 
+        
+        public boolean insertarRegion(int id, String nombre){
+            String consulta = "insert into regions (region_id, region_name) values ("+
+                              id+", '"+nombre+"')";            
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                System.out.println("Inserccion correcta en country");
+                else
+                    System.out.println("Ha ocurrido un error - Inserccion en country");
+                return true;
+            }catch(Exception e){
+                System.out.println(e);
+                return false;
+            }
+        }
+        public boolean actualizarRegion(int id, String nombre){
+            String consulta = "update regions Set region_name = '"+nombre+"' Where region_id="+id;
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                    System.out.println("Actualizacion correcta");
+                return true;
+            }catch(Exception e){
+                return false;
+            }
+        }         
+        public boolean eliminarRegion(int id){
+            String consulta = "delete from regions where region_id="+id;
+            try{
+                if(ejecutarActualizacion(consulta)){
+                    System.out.println("Eliminacion correcta de country");
+                    return true;
+                }else{ 
+                    System.out.println("Falla al eliminar country");
+                    return false;
+                }
+            }catch(Exception e){
+                return false;
+            }
+          
+        }
+        
+/**
+ * 
+ * @param sql
+ * @return 
+ */        
         public boolean ejecutarActualizacion (String sql) {
         try {
             Statement sentencia;
