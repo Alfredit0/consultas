@@ -316,101 +316,15 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     }//GEN-LAST:event_jButtonMenuActionPerformed
 
     private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
-        if("".equals(textId1.getText())&&"".equals(textNomD.getText())&&"".equals(textRegionId.getText()))
-        JOptionPane.showMessageDialog(null, "Por favor rellene todos los campos");
-        else{
-            if(bandEdit!=1){
-                if(d.conectar()){
-                    String id = textId1.getText();
-                    String nom= textNomD.getText();
-                    int rid = Integer.parseInt(textRegionId.getText());
-                    if (d.insertarCountry(id, nom, rid)){
-                        String []Datos= new String[3];
-                        Datos[0]= id;
-                        Datos[1]=nom;
-                        Datos[2]=""+rid;
-                        modelo.addRow(Datos);
-                    }
-                }
-                else
-                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
-                if(d.desconectar())
-                System.out.println("Desconectado tras jecutar la consulta.");
-                else
-                System.out.println("Por alguna razón no se ha podido desconectar.");
-            }else{
-                if(idEdit.equals(textId1.getText())){
-                }else{
-                    JOptionPane.showMessageDialog(null, "El campo Id no se puede modificar porque es clave primaria, se guardaran los demas valores excepto este");
-                }
-                if(d.conectar()){
-                    String id = idEdit;
-                    String nom= textNomD.getText();
-                    int rid = Integer.parseInt(textRegionId.getText());
-                    if (d.actualizarCountry(id, nom, rid)){
-                        try {
-                            cargarDatos();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-                else
-                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
-                if(d.desconectar())
-                System.out.println("Desconectado tras jecutar la consulta.");
-                else
-                System.out.println("Por alguna razón no se ha podido desconectar.");
-                bandEdit=0;
-            }
-        }
+
     }//GEN-LAST:event_btnAgregarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        if(jTable1.getSelectedRow()!=-1){
-            String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
-            int dialogButton = JOptionPane.YES_NO_OPTION;
-            int dialogResult = JOptionPane.showConfirmDialog(this, "¿Eliminar el Registro con ID: "+idSelected,
-                "Eliminar Regustro", dialogButton);
-            if(dialogResult == 0) {
-                if(d.conectar()){
 
-                    if (!d.eliminarCountry(idSelected)){
-                        JOptionPane.showMessageDialog(null, "Por motivos de integridad referencial, no puede eliminarse\n" +
-                            "esa tupla");
-                    }else{
-                        try {
-                            cargarDatos();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                }
-                else
-                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
-                if(d.desconectar())
-                System.out.println("Desconectado tras jecutar la consulta.");
-                else
-                System.out.println("Por alguna razón no se ha podido desconectar.");
-            }
-        }else{
-            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea eliminar");
-        }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        if(jTable1.getSelectedRow()!=-1){
-            String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
-            String nombre=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),1));
-            String region=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),2));
-            bandEdit=1;
-            idEdit=idSelected;
-            textId1.setText(idEdit);
-            textNomD.setText(nombre);
-            textRegionId.setText(region);
-        }else{
-            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea Editar");
-        }
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnAgregar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregar1ActionPerformed
@@ -462,7 +376,12 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 else
                 System.out.println("Por alguna razón no se ha podido desconectar.");
                 bandEdit=0;
+                textId1.setEditable(true);
+                textManagerId.setEditable(true);
+                textLocationId.setEditable(true);                
+                limpiarCajas();                
             }
+            limpiarCajas();
         }
     }//GEN-LAST:event_btnAgregar1ActionPerformed
 
@@ -502,17 +421,27 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         if(jTable1.getSelectedRow()!=-1){
             String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
             String nombre=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),1));
-            String region=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),2));
+            String managerIdr=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),2));
+            String locationIdr=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),3));
             bandEdit=1;
             idEdit=idSelected;
             textId1.setText(idEdit);
             textNomD.setText(nombre);
-            textRegionId.setText(region);
+            textManagerId.setText(managerIdr);
+            textLocationId.setText(locationIdr);
+            textId1.setEditable(false);
+            textManagerId.setEditable(false);
+            textLocationId.setEditable(false);
         }else{
             JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea Editar");
         }
     }//GEN-LAST:event_btnEditar1ActionPerformed
-
+public void limpiarCajas(){
+    textId1.setText("");
+    textNomD.setText("");
+    textManagerId.setText("");
+    textLocationId.setText("");
+}
     /**
      * @param args the command line arguments
      */

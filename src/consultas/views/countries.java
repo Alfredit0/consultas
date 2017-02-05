@@ -317,7 +317,10 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
 		else
 			System.out.println("Por alguna razón no se ha podido desconectar.");
                 bandEdit=0;
+                textId.setEditable(false);
+                textRegionId.setEditable(false);                
         }
+        limpiarCajas();
         }
     }//GEN-LAST:event_btnAgregarActionPerformed
 
@@ -364,11 +367,18 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
            textId.setText(idEdit);
            textNombre.setText(nombre);
            textRegionId.setText(region);
+           textId.setEditable(false);
+           textRegionId.setEditable(false);
         }else{
             JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea Editar");
         }        
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    public void limpiarCajas(){
+        textNombre.setText("");
+        textRegionId.setText("");
+        textId.setText("");        
+    }
     /**
      * @param args the command line arguments
      */

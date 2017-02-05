@@ -117,7 +117,8 @@ private String host;
         }
         public boolean actualizarDeparment(String id, String nombre, int managerId, int locationId){
             String consulta = "update departments Set  department_name='"+
-                    nombre+"', manager_id = "+managerId+",location_id = "+locationId+"  Where department_id='"+id+"'";
+                    nombre+"', manager_id = "+managerId+",location_id = "+locationId+"  Where department_id="+id;
+            System.out.println(consulta);
             try{
                 if(ejecutarActualizacion(consulta))
                     System.out.println("Actualizacion correcta");
