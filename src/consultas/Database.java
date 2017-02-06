@@ -320,10 +320,10 @@ private String host;
 // *************************** EMPLOYEES OPERATIONS *********************************************** 
         
         public boolean insertarEmployee(int id,String fName, String lName, String email,String phone, String hDate,
-                String jobId, int salary, int commision, int mngId, int depId){
+                String jobId, float salary, float commision, int mngId, int depId){
             String consulta = "insert into employees (EMPLOYEE_ID, FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER,HIRE_DATE,"+
                     "JOB_ID,SALARY,COMMISSION_PCT,MANAGER_ID, DEPARTMENT_ID) values ("+
-                              id+", '"+fName+"', '"+lName+"','"+email+"','"+phone+"','"+hDate+"','"+jobId+","+salary+","+
+                              id+", '"+fName+"', '"+lName+"','"+email+"','"+phone+"','"+hDate+"','"+jobId+"',"+salary+","+
                     commision+","+mngId+","+depId+")";            
             System.out.println(consulta);
             try{

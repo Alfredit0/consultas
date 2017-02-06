@@ -63,7 +63,6 @@ public class altaEmployees extends javax.swing.JFrame {
         campo3 = new javax.swing.JTextField();
         campo4 = new javax.swing.JTextField();
         campo5 = new javax.swing.JTextField();
-        campo6 = new javax.swing.JTextField();
         campo7 = new javax.swing.JTextField();
         campo8 = new javax.swing.JTextField();
         campo9 = new javax.swing.JTextField();
@@ -82,6 +81,8 @@ public class altaEmployees extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         lblTitulo = new javax.swing.JLabel();
+        campo6 = new javax.swing.JFormattedTextField();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -90,7 +91,6 @@ public class altaEmployees extends javax.swing.JFrame {
         getContentPane().add(campo3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 160, 177, 30));
         getContentPane().add(campo4, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 210, 177, 30));
         getContentPane().add(campo5, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 250, 177, 30));
-        getContentPane().add(campo6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 300, 177, 30));
         getContentPane().add(campo7, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 350, 177, 30));
         getContentPane().add(campo8, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 400, 177, 30));
         getContentPane().add(campo9, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 450, 177, 30));
@@ -142,6 +142,12 @@ public class altaEmployees extends javax.swing.JFrame {
         lblTitulo.setToolTipText("");
         getContentPane().add(lblTitulo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 20, -1, -1));
 
+        campo6.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter()));
+        getContentPane().add(campo6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 300, 180, 30));
+
+        jLabel12.setText("dd/mm/yyyy");
+        getContentPane().add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 310, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -158,8 +164,32 @@ public class altaEmployees extends javax.swing.JFrame {
                     float commision = Float.parseFloat(campo9.getText());
                     if (d.actualizarEmployee(id, fName, lName, email, phone, hDate, salary, commision)){
                        JOptionPane.showMessageDialog(null,"Actualización correcta");
+                       limpiarCajas();
                     }else{
                         JOptionPane.showMessageDialog(null,"ERROR !!! NO SE PUDO LLEVAR A CABO LA ACUTALIZACIÓN");
+                    }
+                }
+		else
+                    System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+        }else{
+            
+                if(d.conectar()){
+                    int id = Integer.parseInt(campo1.getText());
+                    String fName = campo2.getText();
+                    String lName= campo3.getText();
+                    String email = campo4.getText();
+                    String phone= campo5.getText();
+                    String hDate = campo6.getText();
+                    String jobId = campo7.getText();
+                    float salary = Float.parseFloat(campo8.getText());
+                    float commision = Float.parseFloat(campo9.getText());
+                    int managerId = Integer.parseInt(campo10.getText());
+                    int deptoId = Integer.parseInt(campo11.getText());
+                    if (d.insertarEmployee(id, fName, lName, email, phone, hDate,jobId, salary, commision, managerId, deptoId)){
+                       JOptionPane.showMessageDialog(null,"Inserción correcta");
+                       limpiarCajas();
+                    }else{
+                        JOptionPane.showMessageDialog(null,"ERROR !!! NO SE PUDO LLEVAR A CABO LA INSERCION");
                     }
                 }
 		else
@@ -167,6 +197,19 @@ public class altaEmployees extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void limpiarCajas(){
+        campo1.setText("");
+        campo2.setText("");
+        campo3.setText("");
+        campo4.setText("");
+        campo5.setText("");
+        campo6.setText("");
+        campo7.setText("");
+        campo8.setText("");
+        campo9.setText("");
+        campo10.setText("");
+        campo11.setText("");
+    }
     /**
      * @param args the command line arguments
      */
@@ -210,7 +253,7 @@ public class altaEmployees extends javax.swing.JFrame {
     private javax.swing.JTextField campo3;
     private javax.swing.JTextField campo4;
     private javax.swing.JTextField campo5;
-    private javax.swing.JTextField campo6;
+    private javax.swing.JFormattedTextField campo6;
     private javax.swing.JTextField campo7;
     private javax.swing.JTextField campo8;
     private javax.swing.JTextField campo9;
@@ -218,6 +261,7 @@ public class altaEmployees extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

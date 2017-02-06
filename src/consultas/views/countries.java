@@ -231,7 +231,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 180, -1, -1));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
-        getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
+        getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 680));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
