@@ -227,7 +227,51 @@ private String host;
             }
           
         }
+   // *************************** REGIONS OPERATIONS *********************************************** 
         
+        public boolean insertarJob(String id, String title, int minSalary, int maxSalary){
+            String consulta = "insert into jobs (job_id, job_title, min_salary, max_salary) values ('"+
+                              id+"', '"+title+"', "+minSalary+","+maxSalary+")";            
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                System.out.println("Inserccion correcta en country");
+                else
+                    System.out.println("Ha ocurrido un error - Inserccion en country");
+                return true;
+            }catch(Exception e){
+                System.out.println(e);
+                return false;
+            }
+        }
+        public boolean actualizarJob(String id, String title, int minSalary, int maxSalary){
+            String consulta = "update jobs Set job_title = '"+title+"', min_salary="+minSalary+", max_salary="+
+                    maxSalary+" Where job_id='"+id+"'";
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                    System.out.println("Actualizacion correcta");
+                return true;
+            }catch(Exception e){
+                return false;
+            }
+        }         
+        public boolean eliminarJob(String id){
+            String consulta = "delete from jobs where job_id='"+id+"'";
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta)){
+                    System.out.println("Eliminacion correcta de job");
+                    return true;
+                }else{ 
+                    System.out.println("Falla al eliminar job");
+                    return false;
+                }
+            }catch(Exception e){
+                return false;
+            }
+          
+        }        
 /**
  * 
  * @param sql

@@ -332,7 +332,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                     int id = Integer.parseInt(textId.getText());
                     String nom= textNombre.getText();                    
                     if (d.insertarRegion(id, nom)){
-                        String []Datos= new String[3];
+                        String []Datos= new String[2];
                         Datos[0]= ""+id;
                         Datos[1]=nom;                        
                         modelo.addRow(Datos);

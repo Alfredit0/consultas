@@ -18,9 +18,13 @@ import javax.swing.table.DefaultTableModel;
  * @author Meltsan
  */
 public class jobs extends javax.swing.JFrame {
+    static final boolean EXL = true; //Execute queries on Local Database
     DefaultTableModel modelo;
     Database d;
     ResultSet rs;
+    String idEdit;//Id que se selecciona para editar
+    int bandEdit;//bandera que se activa cuando se presiona el boton de editar    
+    
     /**
      * Creates new form departments
      */
@@ -39,11 +43,15 @@ public void cargarDatos() throws SQLException{
             
             String []Datos= new String[4];
             
-		Database d=new Database();		
+		this.d=new Database();		
                 
-		System.out.println("Conectando con la base de datos:");
+		String consulta;
+                if(EXL)
+                    consulta="select * from jobs";
+                else
+                    consulta="select * from jobs @LINK_A";
 		if(d.conectar()){
-			rs=d.ejecutarConsulta("select * from jobs @LINK_A");
+			rs=d.ejecutarConsulta(consulta);
                         while(rs.next()) {
 				for(int i=1; i<=4; i++) {
 					Datos[i-1]=rs.getString(i);
@@ -53,8 +61,11 @@ public void cargarDatos() throws SQLException{
                 }
 		else
 			System.out.println("No se pudo conectar. Revisa los datos introducidos.");
-                
-    rs=d.ejecutarConsulta("select department_name from departments@LINK_B");
+            if(EXL)
+                    consulta="select department_name from departments";
+                else
+                    consulta="select department_name from departments@LINK_B";    
+    rs=d.ejecutarConsulta(consulta);
     
     while(rs.next()){
         jComboDepart.addItem((String) rs.getObject(1));
@@ -79,7 +90,11 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
 		Database d=new Database();
                 
 		System.out.println("Conectando con la base de datos:");
-                String consulta = "select * from jobs@LINK_A where "+categoria+" LIKE '%"+parametro+"%'";
+                String consulta;
+                if(EXL)
+                    consulta="select * from jobs where "+categoria+" LIKE '%"+parametro+"%'";
+                else
+                    consulta="select * from jobs@LINK_A where "+categoria+" LIKE '%"+parametro+"%'";
                 System.out.println(consulta);
 		if(d.conectar()){
 			this.rs=d.ejecutarConsulta(consulta);
@@ -120,6 +135,17 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jComboDepart = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jButtonMenu = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        textId = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        textTitle = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        textSalaryMin = new javax.swing.JTextField();
+        btnAgregar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
+        textSalaryMax = new javax.swing.JTextField();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -141,7 +167,7 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 900, 290));
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 360, 900, 290));
 
         btnVerTodo.setFont(new java.awt.Font("Franklin Gothic Book", 1, 18)); // NOI18N
         btnVerTodo.setForeground(new java.awt.Color(204, 0, 0));
@@ -229,7 +255,47 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
                 jButtonMenuActionPerformed(evt);
             }
         });
-        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 580, 180, -1));
+        getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 660, 180, -1));
+
+        jLabel4.setText("ID DEL EMPLEO");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 290, -1, -1));
+        getContentPane().add(textId, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 280, 110, 30));
+
+        jLabel5.setText("TÍTULO");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 290, -1, -1));
+        getContentPane().add(textTitle, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 280, 130, 30));
+
+        jLabel6.setText("SALARIO MIN.");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 290, -1, -1));
+        getContentPane().add(textSalaryMin, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 280, 90, 30));
+
+        btnAgregar.setText("Guardar");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 290, -1, -1));
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 290, -1, -1));
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 290, -1, -1));
+
+        jLabel7.setText("SALARIO MAX.");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 330, -1, -1));
+        getContentPane().add(textSalaryMax, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 320, 90, 30));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
@@ -378,6 +444,122 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonMenuActionPerformed
 
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        if("".equals(textId.getText())||"".equals(textTitle.getText())||"".equals(textSalaryMin.getText())||"".equals(textSalaryMax.getText()))
+        JOptionPane.showMessageDialog(null, "Por favor rellene todos los campos");
+        else{
+            if(bandEdit!=1){
+                if(d.conectar()){
+                    try{
+                    String id = textId.getText();
+                    String nom= textTitle.getText();
+                    int minSalary = Integer.parseInt(textSalaryMin.getText());
+                    int maxSalary = Integer.parseInt(textSalaryMax.getText());
+                    if (d.insertarJob(id, nom, minSalary, maxSalary)){
+                        String []Datos= new String[4];
+                        Datos[0]= id;
+                        Datos[1]=nom;
+                        Datos[2]=""+minSalary;
+                        Datos[3]=""+maxSalary;
+                        modelo.addRow(Datos);
+                    }
+                    }catch(NumberFormatException e){
+                        JOptionPane.showMessageDialog(null, "Los salarios deben de ser numeros");
+                    }
+                }
+                else{
+                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                }
+                if(d.desconectar())
+                System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                System.out.println("Por alguna razón no se ha podido desconectar.");
+            }else{
+                if(idEdit.equals(textId.getText())){
+                }else{
+                    JOptionPane.showMessageDialog(null, "El campo Id no se puede modificar porque es clave primaria, se guardaran los demas valores excepto este");
+                }
+                if(d.conectar()){
+                    try{
+                    String id = idEdit;
+                    String nom= textTitle.getText();
+                    int minSalary = Integer.parseInt(textSalaryMin.getText());
+                    int maxSalary = Integer.parseInt(textSalaryMax.getText());
+                    if (d.actualizarJob(id, nom, minSalary,maxSalary)){
+                        try {
+                            cargarDatos();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    }catch(NumberFormatException e){
+                        JOptionPane.showMessageDialog(null,"Los salarios deben de ser números");
+                    }
+                }
+                else{
+                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                }
+                if(d.desconectar())
+                System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                System.out.println("Por alguna razón no se ha podido desconectar.");
+                bandEdit=0;
+                textId.setEditable(true);                
+            }
+            limpiarCajas();
+        }
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+            String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
+            String title=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),1));
+            String salaryMin=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),2));
+            String salaryMax=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),3));
+            bandEdit=1;
+            idEdit=idSelected;
+            textId.setText(idEdit);
+            textTitle.setText(title);
+            textSalaryMin.setText(salaryMin);
+            textSalaryMax.setText(salaryMax);
+            textId.setEditable(false);            
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea Editar");
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+            String idSelected=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(this, "¿Eliminar el Registro con ID: "+idSelected,
+                "Eliminar Regustro", dialogButton);
+            if(dialogResult == 0) {
+                if(d.conectar()){
+
+                    if (!d.eliminarJob(idSelected)){
+                        JOptionPane.showMessageDialog(null, "Por motivos de integridad referencial, no puede eliminarse\n" +
+                            "esa tupla");
+                    }else{
+                        try {
+                            cargarDatos();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                else
+                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                if(d.desconectar())
+                System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                System.out.println("Por alguna razón no se ha podido desconectar.");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea eliminar");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -417,9 +599,17 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             }
         });
     }
-
+public void limpiarCajas(){
+    textId.setText("");
+    textTitle.setText("");
+    textSalaryMin.setText("");
+    textSalaryMax.setText("");
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnVerTodo;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -430,9 +620,17 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFieldParam;
     private javax.swing.JLabel lbl_fondo;
+    private javax.swing.JTextField textId;
+    private javax.swing.JTextField textSalaryMax;
+    private javax.swing.JTextField textSalaryMin;
+    private javax.swing.JTextField textTitle;
     // End of variables declaration//GEN-END:variables
 }
