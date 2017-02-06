@@ -272,7 +272,7 @@ private String host;
             }
           
         }       
-   // *************************** LOCATIONS OPERATIONS *********************************************** 
+// *************************** LOCATIONS OPERATIONS *********************************************** 
         
         public boolean insertarLocation(int id,String address, String cp, String city,String state, String idCountry){
             String consulta = "insert into locations (location_id, street_address, postal_code, city, state_province, country_id) values ("+
@@ -309,7 +309,7 @@ private String host;
                     System.out.println("Eliminacion correcta de location");
                     return true;
                 }else{ 
-                    System.out.println("Falla al eliminar job");
+                    System.out.println("Falla al eliminar location");
                     return false;
                 }
             }catch(Exception e){
@@ -317,6 +317,56 @@ private String host;
             }
           
         }                
+// *************************** EMPLOYEES OPERATIONS *********************************************** 
+        
+        public boolean insertarEmployee(int id,String fName, String lName, String email,String phone, String hDate,
+                String jobId, int salary, int commision, int mngId, int depId){
+            String consulta = "insert into employees (EMPLOYEE_ID, FIRST_NAME,LAST_NAME,EMAIL,PHONE_NUMBER,HIRE_DATE,"+
+                    "JOB_ID,SALARY,COMMISSION_PCT,MANAGER_ID, DEPARTMENT_ID) values ("+
+                              id+", '"+fName+"', '"+lName+"','"+email+"','"+phone+"','"+hDate+"','"+jobId+","+salary+","+
+                    commision+","+mngId+","+depId+")";            
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                System.out.println("Inserccion correcta en employees");
+                else
+                    System.out.println("Ha ocurrido un error - Inserccion en employees");
+                return true;
+            }catch(Exception e){
+                System.out.println(e);
+                return false;
+            }
+        }
+        public boolean actualizarEmployee(int id,String fName, String lName, String email,String phone, String hDate,
+                float salary, float commision){
+            String consulta = "update employees Set FIRST_NAME = '"+fName+"', LAST_NAME='"+lName+"', EMAIL='"+
+                    email+"', PHONE_NUMBER='"+phone+"', HIRE_DATE ='"+hDate+"', SALARY="+
+                    salary+", COMMISSION_PCT="+commision+" Where employee_id="+id+"";
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                    System.out.println("Actualizacion correcta");
+                return true;
+            }catch(Exception e){
+                return false;
+            }
+        }         
+        public boolean eliminarEmployees(int id){
+            String consulta = "delete from employees where EMPLOYEE_ID="+id+"";
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta)){
+                    System.out.println("Eliminacion correcta de employees");
+                    return true;
+                }else{ 
+                    System.out.println("Falla al eliminar job");
+                    return false;
+                }
+            }catch(Exception e){
+                return false;
+            }
+          
+        }         
 /**
  * 
  * @param sql

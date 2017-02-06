@@ -22,8 +22,6 @@ public class employees extends javax.swing.JFrame {
     DefaultTableModel modelo;
     Database d;
     ResultSet rs;
-    String idEdit;//Id que se selecciona para editar
-    int bandEdit;//bandera que se activa cuando se presiona el boton de editar        
     /**
      * Creates new form departments
      */
@@ -52,9 +50,10 @@ public void cargarDatos() throws SQLException{
            this.d=new Database();
             if(EXL)
                 consulta="select * from employees";
-            else
+            else{
                 consulta="select * from employees @LINK_B";
-		System.out.println("Conectando con la base de datos:");
+            }
+		
 		if(d.conectar()){
 			rs=d.ejecutarConsulta(consulta);
                         while(rs.next()) {
@@ -150,6 +149,9 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         jButton5 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jButtonMenu = new javax.swing.JButton();
+        btnAgregar = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         lbl_fondo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -255,6 +257,30 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
             }
         });
         getContentPane().add(jButtonMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 650, 180, -1));
+
+        btnAgregar.setText("AGREGAR NUEVO EMPLEADO");
+        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 323, -1, 30));
+
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 330, -1, -1));
+
+        btnEliminar.setText("Eliminar");
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 330, -1, -1));
 
         lbl_fondo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/consultas/views/fondo1.jpg"))); // NOI18N
         getContentPane().add(lbl_fondo, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 960, 620));
@@ -392,6 +418,66 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
         dispose();        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonMenuActionPerformed
 
+    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+        altaEmployees ventana = new altaEmployees();
+        ventana.setVisible (true); 
+        dispose();        
+    }//GEN-LAST:event_btnAgregarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+            String cmp1=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0));
+            String cmp2=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),1));
+            String cmp3=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),2));
+            String cmp4=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),3));
+            String cmp5=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),4));
+            String cmp6=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),5));
+            String cmp7=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),6));
+            String cmp8=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),7));
+            String cmp9=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),8));
+            String cmp10=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),9));
+            String cmp11=String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),10));
+            altaEmployees ventana = new altaEmployees(cmp1,cmp2,cmp3,cmp4,cmp5,cmp6,cmp7,cmp8,cmp9,cmp10,cmp11);
+            ventana.setVisible (true); 
+            dispose();   
+
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea Editar");
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        if(jTable1.getSelectedRow()!=-1){
+            int idSelected=Integer.parseInt(String.valueOf(modelo.getValueAt(jTable1.getSelectedRow(),0)));
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(this, "¿Eliminar el Registro con ID: "+idSelected,
+                "Eliminar Regustro", dialogButton);
+            if(dialogResult == 0) {
+                if(d.conectar()){
+
+                    if (!d.eliminarEmployees(idSelected)){
+                        JOptionPane.showMessageDialog(null, "Por motivos de integridad referencial, no puede eliminarse\n" +
+                            "esa tupla");
+                    }else{
+                        try {
+                            cargarDatos();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(countries.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+                else
+                System.out.println("No se pudo conectar. Revisa los datos introducidos.");
+                if(d.desconectar())
+                System.out.println("Desconectado tras jecutar la consulta.");
+                else
+                System.out.println("Por alguna razón no se ha podido desconectar.");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Debe seleccionar el registro que desea eliminar");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -433,7 +519,10 @@ public void cargarDatos(String categoria, String parametro) throws SQLException{
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnBuscar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnVerTodo;
     private javax.swing.JButton jButEmpleados;
     private javax.swing.JButton jButton4;
