@@ -271,7 +271,52 @@ private String host;
                 return false;
             }
           
-        }        
+        }       
+   // *************************** LOCATIONS OPERATIONS *********************************************** 
+        
+        public boolean insertarLocation(int id,String address, String cp, String city,String state, String idCountry){
+            String consulta = "insert into locations (location_id, street_address, postal_code, city, state_province, country_id) values ("+
+                              id+", '"+address+"', '"+cp+"','"+city+"','"+state+"','"+idCountry+"')";            
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                System.out.println("Inserccion correcta en location");
+                else
+                    System.out.println("Ha ocurrido un error - Inserccion en location");
+                return true;
+            }catch(Exception e){
+                System.out.println(e);
+                return false;
+            }
+        }
+        public boolean actualizarLocation(int id,String address, String cp, String city,String state){
+            String consulta = "update locations Set street_address = '"+address+"', postal_code='"+cp+"', city='"+
+                    city+"', state_province='"+state+"' Where location_id="+id+"";
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta))
+                    System.out.println("Actualizacion correcta");
+                return true;
+            }catch(Exception e){
+                return false;
+            }
+        }         
+        public boolean eliminarLocation(int id){
+            String consulta = "delete from locations where location_id="+id+"";
+            System.out.println(consulta);
+            try{
+                if(ejecutarActualizacion(consulta)){
+                    System.out.println("Eliminacion correcta de location");
+                    return true;
+                }else{ 
+                    System.out.println("Falla al eliminar job");
+                    return false;
+                }
+            }catch(Exception e){
+                return false;
+            }
+          
+        }                
 /**
  * 
  * @param sql
